@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.iclass.iclassapi.dao.CourseMapper" >
+  <resultMap id="BaseResultMap" type="com.iclass.iclassapi.entity.Course" >
+    <id column="Course_id" property="courseId" jdbcType="INTEGER" />
+    <result column="Course_code" property="courseCode" jdbcType="VARCHAR" />
+    <result column="Course_name" property="courseName" jdbcType="VARCHAR" />
+    <result column="Course_student_count" property="courseStudentCount" jdbcType="INTEGER" />
+    <result column="CourseHour_count" property="coursehourCount" jdbcType="INTEGER" />
+    <result column="Course_credit" property="courseCredit" jdbcType="INTEGER" />
+    <result column="Teacher_id" property="teacherId" jdbcType="INTEGER" />
+    <result column="SchoolBuilding_id" property="schoolbuildingId" jdbcType="INTEGER" />
+    <result column="Course_starttime" property="courseStarttime" jdbcType="TIMESTAMP" />
+    <result column="Course_endtime" property="courseEndtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.iclass.iclassapi.entity.CourseWithBLOBs" extends="BaseResultMap" >
+    <result column="Course_information" property="courseInformation" jdbcType="LONGVARCHAR" />
+    <result column="Course_content" property="courseContent" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    Course_id, Course_code, Course_name, Course_student_count, CourseHour_count, Course_credit, 
+    Teacher_id, SchoolBuilding_id, Course_starttime, Course_endtime
+  </sql>
+  <sql id="Blob_Column_List" >
+    Course_information, Course_content
+  </sql>
+
+  <select id="selectByTeacherId" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer">
+    SELECT
+    c.Course_id, c.Course_code, c.Course_name, c.Course_student_count, c.CourseHour_count, c.Course_credit,
+    c.Teacher_id, c.SchoolBuilding_id, c.Course_starttime, c.Course_endtime,
+    c.Course_information, c.Course_content
+    FROM courses AS c
+    LEFT JOIN teacher AS t
+    ON c.Teacher_id = t.Teacher_id
+    WHERE c.Teacher_id = #{c.Teacher_id}
+  </select>
+
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from courses
+    where Course_id = #{courseId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from courses
+    where Course_id = #{courseId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.iclass.iclassapi.entity.CourseWithBLOBs" useGeneratedKeys="true" keyProperty="courseId">
+    insert into courses (Course_id, Course_code, Course_name,
+      Course_student_count, CourseHour_count, Course_credit, 
+      Teacher_id, SchoolBuilding_id, Course_starttime, 
+      Course_endtime, Course_information, 
+      Course_content)
+    values (#{courseId,jdbcType=INTEGER}, #{courseCode,jdbcType=VARCHAR}, #{courseName,jdbcType=VARCHAR},
+      #{courseStudentCount,jdbcType=INTEGER}, #{coursehourCount,jdbcType=INTEGER}, #{courseCredit,jdbcType=INTEGER}, 
+      #{teacherId,jdbcType=INTEGER}, #{schoolbuildingId,jdbcType=INTEGER}, #{courseStarttime,jdbcType=TIMESTAMP}, 
+      #{courseEndtime,jdbcType=TIMESTAMP}, #{courseInformation,jdbcType=LONGVARCHAR}, 
+      #{courseContent,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.iclass.iclassapi.entity.CourseWithBLOBs" >
+    insert into courses
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="courseId != null" >
+        Course_id,
+      </if>
+      <if test="courseCode != null" >
+        Course_code,
+      </if>
+      <if test="courseName != null" >
+        Course_name,
+      </if>
+      <if test="courseStudentCount != null" >
+        Course_student_count,
+      </if>
+      <if test="coursehourCount != null" >
+        CourseHour_count,
+      </if>
+      <if test="courseCredit != null" >
+        Course_credit,
+      </if>
+      <if test="teacherId != null" >
+        Teacher_id,
+      </if>
+      <if test="schoolbuildingId != null" >
+        SchoolBuilding_id,
+      </if>
+      <if test="courseStarttime != null" >
+        Course_starttime,
+      </if>
+      <if test="courseEndtime != null" >
+        Course_endtime,
+      </if>
+      <if test="courseInformation != null" >
+        Course_information,
+      </if>
+      <if test="courseContent != null" >
+        Course_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="courseId != null" >
+        #{courseId,jdbcType=INTEGER},
+      </if>
+      <if test="courseCode != null" >
+        #{courseCode,jdbcType=VARCHAR},
+      </if>
+      <if test="courseName != null" >
+        #{courseName,jdbcType=VARCHAR},
+      </if>
+      <if test="courseStudentCount != null" >
+        #{courseStudentCount,jdbcType=INTEGER},
+      </if>
+      <if test="coursehourCount != null" >
+        #{coursehourCount,jdbcType=INTEGER},
+      </if>
+      <if test="courseCredit != null" >
+        #{courseCredit,jdbcType=INTEGER},
+      </if>
+      <if test="teacherId != null" >
+        #{teacherId,jdbcType=INTEGER},
+      </if>
+      <if test="schoolbuildingId != null" >
+        #{schoolbuildingId,jdbcType=INTEGER},
+      </if>
+      <if test="courseStarttime != null" >
+        #{courseStarttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="courseEndtime != null" >
+        #{courseEndtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="courseInformation != null" >
+        #{courseInformation,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="courseContent != null" >
+        #{courseContent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.iclass.iclassapi.entity.CourseWithBLOBs" >
+    update courses
+    <set >
+      <if test="courseCode != null" >
+        Course_code = #{courseCode,jdbcType=VARCHAR},
+      </if>
+      <if test="courseName != null" >
+        Course_name = #{courseName,jdbcType=VARCHAR},
+      </if>
+      <if test="courseStudentCount != null" >
+        Course_student_count = #{courseStudentCount,jdbcType=INTEGER},
+      </if>
+      <if test="coursehourCount != null" >
+        CourseHour_count = #{coursehourCount,jdbcType=INTEGER},
+      </if>
+      <if test="courseCredit != null" >
+        Course_credit = #{courseCredit,jdbcType=INTEGER},
+      </if>
+      <if test="teacherId != null" >
+        Teacher_id = #{teacherId,jdbcType=INTEGER},
+      </if>
+      <if test="schoolbuildingId != null" >
+        SchoolBuilding_id = #{schoolbuildingId,jdbcType=INTEGER},
+      </if>
+      <if test="courseStarttime != null" >
+        Course_starttime = #{courseStarttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="courseEndtime != null" >
+        Course_endtime = #{courseEndtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="courseInformation != null" >
+        Course_information = #{courseInformation,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="courseContent != null" >
+        Course_content = #{courseContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where Course_id = #{courseId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.iclass.iclassapi.entity.CourseWithBLOBs" >
+    update courses
+    set Course_code = #{courseCode,jdbcType=VARCHAR},
+      Course_name = #{courseName,jdbcType=VARCHAR},
+      Course_student_count = #{courseStudentCount,jdbcType=INTEGER},
+      CourseHour_count = #{coursehourCount,jdbcType=INTEGER},
+      Course_credit = #{courseCredit,jdbcType=INTEGER},
+      Teacher_id = #{teacherId,jdbcType=INTEGER},
+      SchoolBuilding_id = #{schoolbuildingId,jdbcType=INTEGER},
+      Course_starttime = #{courseStarttime,jdbcType=TIMESTAMP},
+      Course_endtime = #{courseEndtime,jdbcType=TIMESTAMP},
+      Course_information = #{courseInformation,jdbcType=LONGVARCHAR},
+      Course_content = #{courseContent,jdbcType=LONGVARCHAR}
+    where Course_id = #{courseId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.iclass.iclassapi.entity.Course" >
+    update courses
+    set Course_code = #{courseCode,jdbcType=VARCHAR},
+      Course_name = #{courseName,jdbcType=VARCHAR},
+      Course_student_count = #{courseStudentCount,jdbcType=INTEGER},
+      CourseHour_count = #{coursehourCount,jdbcType=INTEGER},
+      Course_credit = #{courseCredit,jdbcType=INTEGER},
+      Teacher_id = #{teacherId,jdbcType=INTEGER},
+      SchoolBuilding_id = #{schoolbuildingId,jdbcType=INTEGER},
+      Course_starttime = #{courseStarttime,jdbcType=TIMESTAMP},
+      Course_endtime = #{courseEndtime,jdbcType=TIMESTAMP}
+    where Course_id = #{courseId,jdbcType=INTEGER}
+  </update>
+</mapper>

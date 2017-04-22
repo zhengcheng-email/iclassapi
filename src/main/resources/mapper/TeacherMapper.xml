@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.iclass.iclassapi.dao.TeacherMapper" >
+  <resultMap id="BaseResultMap" type="com.iclass.iclassapi.entity.Teacher" >
+    <id column="Teacher_id" property="teacherId" jdbcType="INTEGER" />
+    <result column="Teacher_code" property="teacherCode" jdbcType="VARCHAR" />
+    <result column="Teacher_name" property="teacherName" jdbcType="VARCHAR" />
+    <result column="Teacher_email" property="teacherEmail" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.iclass.iclassapi.entity.Teacher" extends="BaseResultMap" >
+    <result column="Teacher_introduce" property="teacherIntroduce" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    Teacher_id, Teacher_code, Teacher_name, Teacher_email
+  </sql>
+  <sql id="Blob_Column_List" >
+    Teacher_introduce
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from teacher
+    where Teacher_id = #{teacherId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from teacher
+    where Teacher_id = #{teacherId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.iclass.iclassapi.entity.Teacher" >
+    insert into teacher (Teacher_id, Teacher_code, Teacher_name, 
+      Teacher_email, Teacher_introduce)
+    values (#{teacherId,jdbcType=INTEGER}, #{teacherCode,jdbcType=VARCHAR}, #{teacherName,jdbcType=VARCHAR}, 
+      #{teacherEmail,jdbcType=VARCHAR}, #{teacherIntroduce,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.iclass.iclassapi.entity.Teacher" >
+    insert into teacher
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="teacherId != null" >
+        Teacher_id,
+      </if>
+      <if test="teacherCode != null" >
+        Teacher_code,
+      </if>
+      <if test="teacherName != null" >
+        Teacher_name,
+      </if>
+      <if test="teacherEmail != null" >
+        Teacher_email,
+      </if>
+      <if test="teacherIntroduce != null" >
+        Teacher_introduce,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="teacherId != null" >
+        #{teacherId,jdbcType=INTEGER},
+      </if>
+      <if test="teacherCode != null" >
+        #{teacherCode,jdbcType=VARCHAR},
+      </if>
+      <if test="teacherName != null" >
+        #{teacherName,jdbcType=VARCHAR},
+      </if>
+      <if test="teacherEmail != null" >
+        #{teacherEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="teacherIntroduce != null" >
+        #{teacherIntroduce,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.iclass.iclassapi.entity.Teacher" >
+    update teacher
+    <set >
+      <if test="teacherCode != null" >
+        Teacher_code = #{teacherCode,jdbcType=VARCHAR},
+      </if>
+      <if test="teacherName != null" >
+        Teacher_name = #{teacherName,jdbcType=VARCHAR},
+      </if>
+      <if test="teacherEmail != null" >
+        Teacher_email = #{teacherEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="teacherIntroduce != null" >
+        Teacher_introduce = #{teacherIntroduce,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where Teacher_id = #{teacherId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.iclass.iclassapi.entity.Teacher" >
+    update teacher
+    set Teacher_code = #{teacherCode,jdbcType=VARCHAR},
+      Teacher_name = #{teacherName,jdbcType=VARCHAR},
+      Teacher_email = #{teacherEmail,jdbcType=VARCHAR},
+      Teacher_introduce = #{teacherIntroduce,jdbcType=LONGVARCHAR}
+    where Teacher_id = #{teacherId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.iclass.iclassapi.entity.Teacher" >
+    update teacher
+    set Teacher_code = #{teacherCode,jdbcType=VARCHAR},
+      Teacher_name = #{teacherName,jdbcType=VARCHAR},
+      Teacher_email = #{teacherEmail,jdbcType=VARCHAR}
+    where Teacher_id = #{teacherId,jdbcType=INTEGER}
+  </update>
+</mapper>
